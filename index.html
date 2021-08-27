@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="search" id="search" data-table="codigos" data-feedback="selected-codigos">
+    <input type="hidden" name="codigos">
+    <span style="display: block; position: absolute;" id="selected-codigos"></span>
+    <table id="codigos" style="position: absolute; margin-top: 20px; border-radius: 3px; display: none; max-height: 100px; overflow-y: scroll; border: solid 1px #000;">
+        <tr>
+            <td><label style="width: 100%; display: block;" for="1">Clarice Manuela Betina Corte Real</label></td>
+            <td><input type="checkbox" id="1"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="2">Antonella Caroline Laura Melo</label></td>
+            <td><input type="checkbox" id="2"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="3">Joana Silvana Alice Novaes</label></td>
+            <td><input type="checkbox" id="3"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="4">Jaqueline Isabella Renata Figueiredo</label></td>
+            <td><input type="checkbox" id="4"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="5">Silvana Rafaela da Cruz</label></td>
+            <td><input type="checkbox" id="5"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="6">Luana Maya Fabiana Assis</label></td>
+            <td><input type="checkbox" id="6"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="7">Daniela Simone Costa</label></td>
+            <td><input type="checkbox" id="7"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="8">Nelson Tiago Barros</label></td>
+            <td><input type="checkbox" id="8"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="9">Emanuelly Aparecida Caroline Rocha</label></td>
+            <td><input type="checkbox" id="9"></td>
+        </tr>
+        <tr>
+            <td><label style="width: 100%; display: block;" for="10">Kevin Fábio Baptista</label></td>
+            <td><input type="checkbox" id="10"></td>
+        </tr>
+    </table>
+    
+    <script>
+
+        document.querySelector('#search').onclick = function(event) {
+            
+            event.stopPropagation();
+           
+            const element = this;
+            const feedback = document.querySelector(`#${element.dataset.feedback}`);
+            const table = document.querySelector(`#${element.dataset.table}`);
+            let selecteds = [];
+
+            console.log('Feedback innerText: ', feedback.innerText);
+
+            if(feedback.innerText){
+                selecteds = JSON.parse(`[${feedback.innerText}]`);
+            };
+
+            console.log(selecteds);
+
+            element.onsearch = searchTable;
+            element.onkeyup = searchTable;
+
+            table.style.display = 'block';
+            
+            function hideTable(){
+                table.style.display = 'none';
+            }
+
+            function handleClickWindow(event){
+                if (table.contains(event.target)){
+                    
+                } else {
+                    hideTable();
+                    window.removeEventListener('click', handleClickWindow);
+                }
+            }
+            
+            table.querySelectorAll('input').forEach((item) => {
+                item.onclick = () => {
+                    if (item.checked){
+                        selecteds.push(item.id);
+                    } else {
+                        const index = selecteds.indexOf(item.id);
+                        if (index !== -1) selecteds.splice(index, 1);
+                    }
+                    console.log(selecteds);
+                    feedback.innerText = selecteds;
+                }
+            });
+
+            window.addEventListener('click', handleClickWindow);
+
+            function searchTable() {
+                var input, filter, ul, li, a, i, txtValue;
+                input = element;
+                filter = input.value.toUpperCase();
+                ul = document.getElementById('codigos');
+                li = ul.getElementsByTagName('tr');
+        
+                for (i = 0; i < li.length; i++) {
+                    a = li[i].getElementsByTagName('td')[0];
+                    txtValue = a.textContent || a.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = '';
+                    } else {
+                        li[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        
+
+        
+    </script>
+</body>
+</html>
