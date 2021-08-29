@@ -157,6 +157,23 @@
 			<input type="text" placeholder="Email" />
 			<input type="text" placeholder="Email" />
 			<input type="text" placeholder="Email" />
+			<select id="select" class="cs">
+				<option value="1">Uno</option>
+				<option value="2">Dos</option>
+				<option value="3">Tres</option>
+				<option value="4">Quatro</option>
+				<option value="5">Cienco</option>
+				<option value="6">Ses</option>
+			</select>
+
+			<select id="select" class="cs">
+				<option value="1">One</option>
+				<option value="2">Two</option>
+				<option value="3">Three</option>
+				<option value="4">Four</option>
+				<option value="5">Five</option>
+				<option value="6">Six</option>
+			</select>
 
 			<p>
 				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam
@@ -166,6 +183,17 @@
 			</p>
 		</form>
 		<script>
+			document.querySelectorAll(".cs").forEach((select) => {
+				let options = [];
+				select.querySelectorAll("option").forEach((option) => {
+					options.push({
+						value: option.value,
+						label: option.innerText,
+					});
+				});
+				console.table(options);
+			});
+
 			document.querySelector("#search").onfocus = () =>
 				document.querySelector("#search").click();
 
