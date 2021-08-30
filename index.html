@@ -8,11 +8,11 @@
 
 		<style>
 			.cs-container {
+				box-sizing: border-box;
 				display: none;
 				background-color: #fff;
 				border: solid 1px #aaa;
 				position: absolute;
-				padding: 0.3em;
 				border-bottom-left-radius: 6px;
 				border-bottom-right-radius: 6px;
 				user-select: none;
@@ -21,20 +21,29 @@
 			}
 
 			.cs-feedback {
-				font-family: monospace;
 				font-size: 1em;
+				margin: 5px;
 			}
 
-			.cs-table {
-				display: block;
-				border-collapse: collapse;
+			.cs-table-wrap {
+				padding: 0.3em;
 				max-height: 100px;
 				overflow-y: scroll;
 			}
 
+			.cs-table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
 			.cs-actions {
-				padding-bottom: 0.3em;
+				display: flex;
 				border-bottom: solid 1px #aaa;
+			}
+
+			.cs-actions button {
+				font-size: 12pt;
+				margin-left: auto;
 			}
 
 			.cs-table label {
@@ -47,8 +56,12 @@
 				cursor: pointer;
 			}
 
+			.cs-table tr {
+				border-bottom: solid 1px #eae5e5;
+			}
+
 			.cs-selected {
-				background-color: #ddd;
+				background-color: #eae5e5;
 			}
 
 			.cs-input-container {
@@ -64,7 +77,7 @@
 			<input type="text" placeholder="Email" />
 			<input type="text" placeholder="Email" />
 			<input type="text" placeholder="Email" />
-			<select id="select" name="numeros" class="cs">
+			<select name="numeros" placeholder="Pesquisa Numeros" class="cs">
 				<option value="1">Uno</option>
 				<option value="2">Dos</option>
 				<option value="3">Tres</option>
@@ -73,7 +86,7 @@
 				<option value="6">Ses</option>
 			</select>
 
-			<select id="select" name="numbers" class="cs">
+			<select name="numbers" placeholder="Search Numbers" class="cs">
 				<option value="1">One</option>
 				<option value="2">Two</option>
 				<option value="3">Three</option>
@@ -97,6 +110,14 @@
 		</form>
 		<script>
 			const customSelects = document.querySelectorAll(".cs");
+
+			const config = {
+				legends: {
+					checkAll: "Marcar todos",
+					uncheckAll: "Desmarcar todos",
+					selecteds: "selecionados",
+				},
+			};
 
 			function insertAfter(newNode, referenceNode) {
 				referenceNode.parentNode.insertBefore(
@@ -122,7 +143,13 @@
 				});
 
 				const inputName = select.getAttribute("name");
+				select.removeAttribute("name");
+				select.style.display = "none";
+				const placeHolder = select.getAttribute("placeholder")
+					? select.getAttribute("placeholder")
+					: "";
 				const containerId = inputName + "Container";
+				const hiddenInputId = inputName + "Input";
 				const searchInputId = inputName + "Search";
 				const feedbackId = inputName + "Feedback";
 				const tableLines = options.reduce((trs, tr) => {
@@ -130,28 +157,31 @@
 						trs +
 						`<tr>
 							<td><label for="${inputName}${tr.value}">${tr.label}</label></td>
-							<td><input data-cs-value="${tr.value}" type="checkbox" id="${inputName}${tr.value}" /></td>
+							<td style="text-align: right"><input data-cs-value="${tr.value}" type="checkbox" id="${inputName}${tr.value}" /></td>
 						</tr>`
 					);
 				}, "");
-				const container = `
-				<div style="display: inline-block">
-					<input type="search" id="${searchInputId}" />
-					<div id="${containerId}" class="cs-container">
-						<div class="cs-actions">
-							<button type="button" class="cs-mark-all" data-mark="1">
-								Marcar todas
-							</button>
-							<span class="cs-feedback" id="${feedbackId}"></span>
+				const containerStringHtml = `
+					<div style="display: inline-block">
+						<input type="search" placeholder="${placeHolder}" id="${searchInputId}" />
+						<input type="hidden" name="${inputName}" id="${hiddenInputId}" />
+						<div id="${containerId}" class="cs-container">
+							<div class="cs-actions">
+								<p class="cs-feedback" id="${feedbackId}">0 ${config.legends.selecteds}</p>
+								<button type="button" class="cs-mark-all" data-mark="1" title="${config.legends.checkAll}">
+									&#9745;
+								</button>
+							</div>
+							<div class="cs-table-wrap">
+								<table class="cs-table">
+									${tableLines}
+								</table>
+							</div>
 						</div>
-						<table class="cs-table">
-							${tableLines}
-						</table>
 					</div>
-				</div>
 				`;
-				console.log(container);
-				insertAfter(htmlToElement(container), select);
+				insertAfter(htmlToElement(containerStringHtml), select);
+				const hiddenInput = document.querySelector(`#${hiddenInputId}`);
 				document.querySelector(`#${searchInputId}`).onfocus = () =>
 					document.querySelector(`#${searchInputId}`).click();
 
@@ -159,13 +189,14 @@
 					event
 				) {
 					event.stopPropagation();
-
-					const element = this;
+					const inputSearchElement = this;
+					const { width } = getComputedStyle(inputSearchElement);
 					const feedback = document.querySelector(`#${feedbackId}`);
 					const table = document.querySelector(
 						`#${containerId} table`
 					);
 					const container = document.querySelector(`#${containerId}`);
+					container.style.minWidth = width;
 					let selecteds = [];
 
 					container.querySelector(".cs-mark-all").onclick = function (
@@ -174,7 +205,11 @@
 						selecteds = [];
 						if (this.dataset.mark) {
 							table.querySelectorAll("input").forEach((item) => {
-								this.innerText = "Desmarcar todas";
+								this.innerHTML = "&#9744;";
+								this.setAttribute(
+									"title",
+									config.legends.uncheckAll
+								);
 								item.checked = true;
 								selecteds.push(parseInt(item.dataset.csValue));
 								item.parentElement.parentElement.classList.add(
@@ -183,23 +218,28 @@
 							});
 						} else {
 							table.querySelectorAll("input").forEach((item) => {
-								this.innerText = "Marcar todas";
+								this.innerHTML = "&#9745;";
+								this.setAttribute(
+									"title",
+									config.legends.checkAll
+								);
 								item.checked = false;
 								item.parentElement.parentElement.classList.remove(
 									"cs-selected"
 								);
 							});
 						}
-						feedback.innerText = selecteds;
+						feedback.innerText = `${selecteds.length} ${config.legends.selecteds}`;
+						hiddenInput.value = selecteds;
 						this.dataset.mark = !!this.dataset.mark ? "" : "1";
 					};
 
-					if (feedback.innerText) {
-						selecteds = JSON.parse(`[${feedback.innerText}]`);
+					if (hiddenInput.value) {
+						selecteds = JSON.parse(`[${hiddenInput.value}]`);
 					}
 
-					element.onsearch = searchTable;
-					element.onkeyup = searchTable;
+					inputSearchElement.onsearch = searchTable;
+					inputSearchElement.onkeyup = searchTable;
 
 					container.style.display = "block";
 
@@ -214,7 +254,7 @@
 								"click",
 								handleClickWindow
 							);
-							element.value = "";
+							inputSearchElement.value = "";
 							table
 								.querySelectorAll("tr")
 								.forEach((item) => (item.style.display = ""));
@@ -231,29 +271,29 @@
 							} else {
 								selecteds.push(parseInt(item.dataset.csValue));
 							}
-							feedback.innerText = selecteds;
+							hiddenInput.value = selecteds;
 							item.parentElement.parentElement.classList.toggle(
 								"cs-selected"
 							);
+							feedback.innerText = `${selecteds.length} ${config.legends.selecteds}`;
 						};
 					});
 
 					window.addEventListener("click", handleClickWindow);
 
 					function searchTable() {
-						var input, filter, ul, li, a, i, txtValue;
-						input = element;
+						let input, filter, tr, td, i, txtValue;
+						input = inputSearchElement;
 						filter = input.value.toUpperCase();
-						ul = table;
-						li = ul.getElementsByTagName("tr");
+						tr = table.getElementsByTagName("tr");
 
-						for (i = 0; i < li.length; i++) {
-							a = li[i].getElementsByTagName("td")[0];
-							txtValue = a.textContent || a.innerText;
+						for (i = 0; i < tr.length; i++) {
+							td = tr[i].getElementsByTagName("td")[0];
+							txtValue = td.textContent || td.innerText;
 							if (txtValue.toUpperCase().indexOf(filter) > -1) {
-								li[i].style.display = "";
+								tr[i].style.display = "";
 							} else {
-								li[i].style.display = "none";
+								tr[i].style.display = "none";
 							}
 						}
 					}
