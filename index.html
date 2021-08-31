@@ -4,159 +4,43 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-
-		<style>
-			.cs-container {
-				display: none;
-				background-color: #fff;
-				border: solid 1px #aaa;
-				position: absolute;
-				margin-top: 1em;
-				padding: 0.3em;
-				border-bottom-left-radius: 6px;
-				border-bottom-right-radius: 6px;
-				user-select: none;
-				font-family: sans-serif;
-				font-size: 10pt;
-			}
-
-			.cs-feedback {
-				display: block;
-				position: absolute;
-				font-family: monospace;
-				font-size: 1em;
-			}
-
-			.cs-table {
-				display: block;
-				border-collapse: collapse;
-				max-height: 150px;
-				overflow-y: scroll;
-			}
-
-			.cs-actions {
-				padding-bottom: 0.3em;
-				border-bottom: solid 1px #aaa;
-			}
-
-			.cs-table label {
-				width: 100%;
-				padding: 0.2em 0;
-				cursor: pointer;
-				display: block;
-			}
-			.cs-table input {
-				cursor: pointer;
-			}
-
-			.cs-selected {
-				background-color: #f0f0f0;
-			}
-
-			.cs-input-container {
-				display: inline-block;
-				margin-bottom: 1em;
-			}
-		</style>
+		<title>Custom Selects by LaercioLopesLL</title>
+		<link rel="stylesheet" href="css/custom-selects.css" />
 	</head>
 	<body>
-		<form action="">
+		<form action="" autocomplete="off">
 			<input type="text" placeholder="Nome" id="" />
-			<div class="cs-input-container">
-				<input
-					type="search"
-					id="search"
-					data-table="codigos"
-					data-feedback="selected-codigos"
-				/>
-				<input type="hidden" name="codigos" />
-				<span class="cs-feedback" id="selected-codigos"></span>
-				<div id="codigos" class="cs-container">
-					<div class="cs-actions">
-						<button type="button" class="cs-mark-all" data-mark="1">
-							Marcar todas
-						</button>
-					</div>
+			<input type="text" placeholder="Email" />
+			<input type="text" placeholder="Email" />
+			<input type="text" placeholder="Email" />
+			<input type="text" placeholder="Email" />
+			<select
+				name="numeros"
+				placeholder="Pesquisa Numeros"
+				class="cs-new"
+			>
+				<option value="1">Uno</option>
+				<option value="2">Dos</option>
+				<option value="3">Tres</option>
+				<option value="4">Quatro</option>
+				<option value="5">Cienco</option>
+				<option value="6">Ses</option>
+			</select>
 
-					<table class="cs-table">
-						<tr>
-							<td>
-								<label for="1"
-									>Clarice Manuela Betina Corte Real</label
-								>
-							</td>
-							<td><input type="checkbox" id="1" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="2"
-									>Antonella Caroline Laura Melo</label
-								>
-							</td>
-							<td><input type="checkbox" id="2" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="3"
-									>Joana Silvana Alice Novaes</label
-								>
-							</td>
-							<td><input type="checkbox" id="3" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="4"
-									>Jaqueline Isabella Renata Figueiredo</label
-								>
-							</td>
-							<td><input type="checkbox" id="4" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="5">Silvana Rafaela da Cruz</label>
-							</td>
-							<td><input type="checkbox" id="5" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="6">Luana Maya Fabiana Assis</label>
-							</td>
-							<td><input type="checkbox" id="6" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="7">Daniela Simone Costa</label>
-							</td>
-							<td><input type="checkbox" id="7" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="8">Nelson Tiago Barros</label>
-							</td>
-							<td><input type="checkbox" id="8" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="9"
-									>Emanuelly Aparecida Caroline Rocha</label
-								>
-							</td>
-							<td><input type="checkbox" id="9" /></td>
-						</tr>
-						<tr>
-							<td>
-								<label for="10">Kevin Fábio Baptista</label>
-							</td>
-							<td><input type="checkbox" id="10" /></td>
-						</tr>
-					</table>
-				</div>
-			</div>
-			<input type="text" placeholder="Email" />
-			<input type="text" placeholder="Email" />
-			<input type="text" placeholder="Email" />
-			<input type="text" placeholder="Email" />
+			<select name="numbers" placeholder="Search Numbers" class="cs-new">
+				<option value="1">One</option>
+				<option value="2">Two</option>
+				<option value="3">Three</option>
+				<option value="4">Four</option>
+				<option value="5">Five</option>
+				<option value="6">Six</option>
+				<option value="7">Seven</option>
+				<option value="8">Eigth</option>
+				<option value="9">Nine</option>
+				<option value="10">Ten</option>
+				<option value="11">Eleven</option>
+				<option value="12">Twelve</option>
+			</select>
 
 			<p>
 				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam
@@ -165,110 +49,6 @@
 				sit magnam pariatur! Nulla!
 			</p>
 		</form>
-		<script>
-			document.querySelector("#search").onfocus = () =>
-				document.querySelector("#search").click();
-
-			document.querySelector("#search").onclick = function (event) {
-				event.stopPropagation();
-
-				const element = this;
-				const feedback = document.querySelector(
-					`#${element.dataset.feedback}`
-				);
-				const table = document.querySelector(
-					`#${element.dataset.table} table`
-				);
-				const container = document.querySelector(
-					`#${element.dataset.table}`
-				);
-				let selecteds = [];
-
-				container.querySelector(".cs-mark-all").onclick = function (
-					event
-				) {
-					selecteds = [];
-					if (this.dataset.mark) {
-						table.querySelectorAll("input").forEach((item) => {
-							this.innerText = "Desmarcar todas";
-							item.checked = true;
-							selecteds.push(parseInt(item.id));
-							item.parentElement.parentElement.classList.add(
-								"cs-selected"
-							);
-						});
-					} else {
-						table.querySelectorAll("input").forEach((item) => {
-							this.innerText = "Marcar todas";
-							item.checked = false;
-							item.parentElement.parentElement.classList.remove(
-								"cs-selected"
-							);
-						});
-					}
-					feedback.innerText = selecteds;
-					this.dataset.mark = !!this.dataset.mark ? "" : "1";
-				};
-
-				if (feedback.innerText) {
-					selecteds = JSON.parse(`[${feedback.innerText}]`);
-				}
-
-				element.onsearch = searchTable;
-				element.onkeyup = searchTable;
-
-				container.style.display = "block";
-
-				function hideCs() {
-					container.style.display = "none";
-				}
-
-				function handleClickWindow(event) {
-					if (!container.contains(event.target)) {
-						hideCs();
-						window.removeEventListener("click", handleClickWindow);
-						element.value = "";
-						table
-							.querySelectorAll("tr")
-							.forEach((item) => (item.style.display = ""));
-					}
-				}
-
-				table.querySelectorAll("input").forEach((item) => {
-					item.onclick = () => {
-						const index = selecteds.indexOf(parseInt(item.id));
-						if (index !== -1) {
-							selecteds.splice(index, 1);
-						} else {
-							selecteds.push(parseInt(item.id));
-						}
-						feedback.innerText = selecteds;
-						item.parentElement.parentElement.classList.toggle(
-							"cs-selected"
-						);
-					};
-				});
-
-				window.addEventListener("click", handleClickWindow);
-
-				function searchTable() {
-					var input, filter, ul, li, a, i, txtValue;
-					input = element;
-					filter = input.value.toUpperCase();
-					ul = document.getElementById("codigos");
-					li = ul.getElementsByTagName("tr");
-
-					for (i = 0; i < li.length; i++) {
-						a = li[i].getElementsByTagName("td")[0];
-						txtValue = a.textContent || a.innerText;
-						if (txtValue.toUpperCase().indexOf(filter) > -1) {
-							li[i].style.display = "";
-						} else {
-							li[i].style.display = "none";
-						}
-					}
-				}
-			};
-		</script>
+		<script src="js/custom-selects.js"></script>
 	</body>
 </html>

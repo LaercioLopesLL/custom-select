@@ -1,0 +1,61 @@
+.cs-container {
+	box-sizing: border-box;
+	display: none;
+	background-color: #fff;
+	border: solid 1px #aaa;
+	position: absolute;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	user-select: none;
+	font-family: sans-serif;
+	font-size: 10pt;
+}
+
+.cs-feedback {
+	font-size: 1em;
+	margin: 5px;
+}
+
+.cs-table-wrap {
+	padding: 0.3em;
+	max-height: 100px;
+	overflow-y: scroll;
+}
+
+.cs-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.cs-actions {
+	display: flex;
+	border-bottom: solid 1px #aaa;
+}
+
+.cs-actions button {
+	font-size: 12pt;
+	margin-left: auto;
+}
+
+.cs-table label {
+	width: 100%;
+	padding: 0.2em 0;
+	cursor: pointer;
+	display: block;
+}
+.cs-table input {
+	cursor: pointer;
+}
+
+.cs-table tr {
+	border-bottom: solid 1px #eae5e5;
+}
+
+.cs-selected {
+	background-color: #eae5e5;
+}
+
+.cs-input-container {
+	display: inline-block;
+	margin-bottom: 1em;
+}
