@@ -1,3 +1,0 @@
-TODO
-
-- Colocar title com os nomes dos itens selecionados.
