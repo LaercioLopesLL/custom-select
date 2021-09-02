@@ -16,15 +16,10 @@
 	margin: 5px;
 }
 
-.cs-table-wrap {
+.label-container {
 	padding: 0.3em;
 	max-height: 100px;
 	overflow-y: scroll;
-}
-
-.cs-table {
-	width: 100%;
-	border-collapse: collapse;
 }
 
 .cs-actions {
@@ -37,18 +32,15 @@
 	margin-left: auto;
 }
 
-.cs-table label {
+.label-container label {
 	width: 100%;
 	padding: 0.2em 0;
 	cursor: pointer;
-	display: block;
+	display: flex;
+	justify-content: space-between;
 }
-.cs-table input {
+.label-container input {
 	cursor: pointer;
-}
-
-.cs-table tr {
-	border-bottom: solid 1px #eae5e5;
 }
 
 .cs-selected {

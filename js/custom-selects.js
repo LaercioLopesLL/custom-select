@@ -43,13 +43,10 @@ function customSelects(params) {
 		const hiddenInputId = inputName + "Input";
 		const searchInputId = inputName + "Search";
 		const feedbackId = inputName + "Feedback";
-		const tableLines = options.reduce((trs, tr) => {
+		const labelLines = options.reduce((labels, label) => {
 			return (
-				trs +
-				`<tr>
-				<td><label for="${inputName}${tr.value}">${tr.label}</label></td>
-				<td style="text-align: right"><input data-cs-value="${tr.value}" type="checkbox" id="${inputName}${tr.value}" /></td>
-			</tr>`
+				labels +
+				`<label for="${inputName}${label.value}">${label.label}<input data-cs-value="${label.value}" type="checkbox" id="${inputName}${label.value}" /></label>`
 			);
 		}, "");
 		const containerStringHtml = `
@@ -63,10 +60,8 @@ function customSelects(params) {
 						&#9745;
 					</button>
 				</div>
-				<div class="cs-table-wrap">
-					<table class="cs-table">
-						${tableLines}
-					</table>
+				<div class="label-container">
+					${labelLines}
 				</div>
 			</div>
 		</div>
@@ -83,7 +78,9 @@ function customSelects(params) {
 			const inputSearchElement = this;
 			const { width } = getComputedStyle(inputSearchElement);
 			const feedback = document.querySelector(`#${feedbackId}`);
-			const table = document.querySelector(`#${containerId} table`);
+			const labelContainer = document.querySelector(
+				`#${containerId} .label-container`
+			);
 			const container = document.querySelector(`#${containerId}`);
 			container.style.minWidth = width;
 			let selecteds = [];
@@ -91,23 +88,19 @@ function customSelects(params) {
 			container.querySelector(".cs-mark-all").onclick = function (event) {
 				selecteds = [];
 				if (this.dataset.mark) {
-					table.querySelectorAll("input").forEach((item) => {
+					labelContainer.querySelectorAll("input").forEach((item) => {
 						this.innerHTML = "&#9744;";
 						this.setAttribute("title", config.legendUncheckAll);
 						item.checked = true;
 						selecteds.push(parseInt(item.dataset.csValue));
-						item.parentElement.parentElement.classList.add(
-							"cs-selected"
-						);
+						item.parentElement.classList.add("cs-selected");
 					});
 				} else {
-					table.querySelectorAll("input").forEach((item) => {
+					labelContainer.querySelectorAll("input").forEach((item) => {
 						this.innerHTML = "&#9745;";
 						this.setAttribute("title", config.legendCheckAll);
 						item.checked = false;
-						item.parentElement.parentElement.classList.remove(
-							"cs-selected"
-						);
+						item.parentElement.classList.remove("cs-selected");
 					});
 				}
 				feedback.innerText = `${selecteds.length} ${config.legendSelecteds}`;
@@ -124,8 +117,8 @@ function customSelects(params) {
 				selecteds = JSON.parse(`[${hiddenInput.value}]`);
 			}
 
-			inputSearchElement.onsearch = searchTable;
-			inputSearchElement.onkeyup = searchTable;
+			inputSearchElement.onsearch = search;
+			inputSearchElement.onkeyup = search;
 
 			container.style.display = "block";
 
@@ -139,13 +132,13 @@ function customSelects(params) {
 					window.removeEventListener("click", handleClickWindow);
 					inputSearchElement.value =
 						inputSearchElement.getAttribute("title");
-					table
-						.querySelectorAll("tr")
+					labelContainer
+						.querySelectorAll("label")
 						.forEach((item) => (item.style.display = ""));
 				}
 			}
 
-			table.querySelectorAll("input").forEach((item) => {
+			labelContainer.querySelectorAll("input").forEach((item) => {
 				item.onclick = () => {
 					const index = selecteds.indexOf(
 						parseInt(item.dataset.csValue)
@@ -156,9 +149,7 @@ function customSelects(params) {
 						selecteds.push(parseInt(item.dataset.csValue));
 					}
 					hiddenInput.value = selecteds;
-					item.parentElement.parentElement.classList.toggle(
-						"cs-selected"
-					);
+					item.parentElement.classList.toggle("cs-selected");
 					feedback.innerText = `${selecteds.length} ${config.legendSelecteds}`;
 
 					const titles = selecteds.map(
@@ -172,19 +163,18 @@ function customSelects(params) {
 
 			window.addEventListener("click", handleClickWindow);
 
-			function searchTable() {
-				let input, filter, tr, td, i, txtValue;
+			function search() {
+				let input, filter, label, txtValue;
 				input = inputSearchElement;
 				filter = input.value.toUpperCase();
-				tr = table.getElementsByTagName("tr");
+				label = labelContainer.getElementsByTagName("label");
 
-				for (i = 0; i < tr.length; i++) {
-					td = tr[i].getElementsByTagName("td")[0];
-					txtValue = td.textContent || td.innerText;
+				for (let i = 0; i < label.length; i++) {
+					txtValue = label[i].textContent || label[i].innerText;
 					if (txtValue.toUpperCase().indexOf(filter) > -1) {
-						tr[i].style.display = "";
+						label[i].style.display = "";
 					} else {
-						tr[i].style.display = "none";
+						label[i].style.display = "none";
 					}
 				}
 			}
