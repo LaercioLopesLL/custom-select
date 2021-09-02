@@ -24,13 +24,14 @@ function customSelects(params) {
 	}
 
 	selects.forEach((select) => {
-		let options = [];
-		select.querySelectorAll("option").forEach((option) => {
-			options.push({
-				value: option.value,
-				label: option.innerText,
-			});
-		});
+		const options = Array.from(select.querySelectorAll("option")).map(
+			(option) => {
+				return {
+					value: option.value,
+					label: option.innerText,
+				};
+			}
+		);
 
 		const inputName = select.getAttribute("name");
 		select.style.display = "none";
@@ -72,8 +73,10 @@ function customSelects(params) {
 	`;
 		insertAfter(htmlToElement(containerStringHtml), select);
 		const hiddenInput = document.querySelector(`#${hiddenInputId}`);
-		document.querySelector(`#${searchInputId}`).onfocus = () =>
-			document.querySelector(`#${searchInputId}`).click();
+		document.querySelector(`#${searchInputId}`).onfocus = function () {
+			this.value = "";
+			this.click();
+		};
 
 		document.querySelector(`#${searchInputId}`).onclick = function (event) {
 			event.stopPropagation();
@@ -84,8 +87,6 @@ function customSelects(params) {
 			const container = document.querySelector(`#${containerId}`);
 			container.style.minWidth = width;
 			let selecteds = [];
-
-			inputSearchElement.value = "";
 
 			container.querySelector(".cs-mark-all").onclick = function (event) {
 				selecteds = [];
