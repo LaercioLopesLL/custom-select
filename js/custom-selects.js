@@ -46,26 +46,29 @@ function customSelects(params) {
 		const labelLines = options.reduce((labels, label) => {
 			return (
 				labels +
-				`<label for="${inputName}${label.value}">${label.label}<input data-cs-value="${label.value}" type="checkbox" id="${inputName}${label.value}" /></label>`
+				`<label for="${inputName}${label.value}">
+					${label.label}
+					<input data-cs-value="${label.value}" type="checkbox" id="${inputName}${label.value}" />
+				</label>`
 			);
 		}, "");
 		const containerStringHtml = `
-		<div style="display: inline-block">
-			<input type="search" placeholder="${placeHolder}" id="${searchInputId}" />
-			<input type="hidden" name="${inputName}" id="${hiddenInputId}" />
-			<div id="${containerId}" class="cs-container">
-				<div class="cs-actions">
-					<p class="cs-feedback" id="${feedbackId}">0 ${config.legendSelecteds}</p>
-					<button type="button" class="cs-mark-all" data-mark="1" title="${config.legendCheckAll}">
-						&#9745;
-					</button>
-				</div>
-				<div class="label-container">
-					${labelLines}
+			<div style="display: inline-block">
+				<input type="search" placeholder="${placeHolder}" id="${searchInputId}" />
+				<input type="hidden" name="${inputName}" id="${hiddenInputId}" />
+				<div id="${containerId}" class="cs-container">
+					<div class="cs-actions">
+						<p class="cs-feedback" id="${feedbackId}">0 ${config.legendSelecteds}</p>
+						<button type="button" class="cs-mark-all" data-mark="1" title="${config.legendCheckAll}">
+							&#9745;
+						</button>
+					</div>
+					<div class="label-container">
+						${labelLines}
+					</div>
 				</div>
 			</div>
-		</div>
-	`;
+		`;
 		insertAfter(htmlToElement(containerStringHtml), select);
 		const hiddenInput = document.querySelector(`#${hiddenInputId}`);
 		document.querySelector(`#${searchInputId}`).onfocus = function () {
