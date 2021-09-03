@@ -52,6 +52,7 @@ function customSelects(params) {
 				</label>`
 			);
 		}, "");
+
 		const containerStringHtml = `
 			<div style="display: inline-block">
 				<input type="search" placeholder="${placeHolder}" id="${searchInputId}" />
@@ -69,6 +70,7 @@ function customSelects(params) {
 				</div>
 			</div>
 		`;
+
 		insertAfter(htmlToElement(containerStringHtml), select);
 		const hiddenInput = document.querySelector(`#${hiddenInputId}`);
 		document.querySelector(`#${searchInputId}`).onfocus = function () {
@@ -88,20 +90,20 @@ function customSelects(params) {
 			container.style.minWidth = width;
 			let selecteds = [];
 
-			container.querySelector(".cs-mark-all").onclick = function (event) {
+			container.querySelector(".cs-mark-all").onclick = function () {
 				selecteds = [];
 				if (this.dataset.mark) {
+					this.innerHTML = "&#9744;";
+					this.setAttribute("title", config.legendUncheckAll);
 					labelContainer.querySelectorAll("input").forEach((item) => {
-						this.innerHTML = "&#9744;";
-						this.setAttribute("title", config.legendUncheckAll);
 						item.checked = true;
 						selecteds.push(parseInt(item.dataset.csValue));
 						item.parentElement.classList.add("cs-selected");
 					});
 				} else {
+					this.innerHTML = "&#9745;";
+					this.setAttribute("title", config.legendCheckAll);
 					labelContainer.querySelectorAll("input").forEach((item) => {
-						this.innerHTML = "&#9745;";
-						this.setAttribute("title", config.legendCheckAll);
 						item.checked = false;
 						item.parentElement.classList.remove("cs-selected");
 					});
@@ -154,7 +156,6 @@ function customSelects(params) {
 					hiddenInput.value = selecteds;
 					item.parentElement.classList.toggle("cs-selected");
 					feedback.innerText = `${selecteds.length} ${config.legendSelecteds}`;
-
 					const titles = selecteds.map(
 						(selected) =>
 							options.find((option) => option.value == selected)
@@ -167,19 +168,19 @@ function customSelects(params) {
 			window.addEventListener("click", handleClickWindow);
 
 			function search() {
-				let input, filter, label, txtValue;
+				let input, filter, labels, txtValue;
 				input = inputSearchElement;
 				filter = input.value.toUpperCase();
-				label = labelContainer.getElementsByTagName("label");
+				labels = labelContainer.querySelectorAll("label");
 
-				for (let i = 0; i < label.length; i++) {
-					txtValue = label[i].textContent || label[i].innerText;
+				Array.from(labels).map((label) => {
+					txtValue = label.textContent || label.innerText;
 					if (txtValue.toUpperCase().indexOf(filter) > -1) {
-						label[i].style.display = "";
+						label.style.display = "";
 					} else {
-						label[i].style.display = "none";
+						label.style.display = "none";
 					}
-				}
+				});
 			}
 		};
 	});
