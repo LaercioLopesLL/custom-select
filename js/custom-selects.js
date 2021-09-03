@@ -185,5 +185,3 @@ function customSelects(params) {
 		};
 	});
 }
-
-customSelects({ selector: ".cs-new" });
