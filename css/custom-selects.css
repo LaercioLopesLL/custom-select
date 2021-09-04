@@ -24,12 +24,15 @@
 
 .cs-actions {
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	border-bottom: solid 1px #aaa;
 }
 
 .cs-actions button {
+	display: flex;
+	align-items: center;
 	font-size: 12pt;
-	margin-left: auto;
 }
 
 .label-container label {
@@ -38,6 +41,7 @@
 	cursor: pointer;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 .label-container input {
 	cursor: pointer;
