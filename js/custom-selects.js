@@ -55,7 +55,7 @@ function customSelects(params) {
 
 		const containerStringHtml = `
 			<div style="display: inline-block">
-				<input type="search" placeholder="${placeHolder}" id="${searchInputId}" />
+				<input type="search" class="search-input" placeholder="${placeHolder}" id="${searchInputId}" />
 				<input type="hidden" name="${inputName}" id="${hiddenInputId}" />
 				<div id="${containerId}" class="cs-container">
 					<div class="cs-actions">

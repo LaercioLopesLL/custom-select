@@ -55,3 +55,7 @@
 	display: inline-block;
 	margin-bottom: 1em;
 }
+
+.search-input {
+	width: 100%;
+}
