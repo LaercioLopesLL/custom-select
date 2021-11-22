@@ -24,15 +24,6 @@ function customSelects(params) {
 	}
 
 	selects.forEach((select) => {
-		const options = Array.from(select.querySelectorAll("option")).map(
-			(option) => {
-				return {
-					value: option.value,
-					label: option.innerText,
-				};
-			}
-		);
-
 		const inputName = select.getAttribute("name");
 		select.style.display = "none";
 		select.removeAttribute("name");
@@ -43,15 +34,7 @@ function customSelects(params) {
 		const hiddenInputId = inputName + "Input";
 		const searchInputId = inputName + "Search";
 		const feedbackId = inputName + "Feedback";
-		const labelLines = options.reduce((labels, label) => {
-			return (
-				labels +
-				`<label for="${inputName}${label.value}">
-					${label.label}
-					<input data-cs-value="${label.value}" type="checkbox" id="${inputName}${label.value}" />
-				</label>`
-			);
-		}, "");
+		const labelContainerId = inputName + "LabelContainer";
 
 		const containerStringHtml = `
 			<div style="display: inline-block">
@@ -64,9 +47,7 @@ function customSelects(params) {
 							&#9745;
 						</button>
 					</div>
-					<div class="label-container">
-						${labelLines}
-					</div>
+					<div id="${labelContainerId}" class="label-container"></div>
 				</div>
 			</div>
 		`;
@@ -80,6 +61,31 @@ function customSelects(params) {
 
 		document.querySelector(`#${searchInputId}`).onclick = function (event) {
 			event.stopPropagation();
+
+			const options = Array.from(select.querySelectorAll("option")).map(
+				(option) => {
+					return {
+						value: option.value,
+						label: option.innerText,
+					};
+				}
+			);
+
+			const labelLines = options.reduce((labels, label) => {
+				return (
+					labels +
+					`<label for="${inputName}${label.value}">
+					${label.label}
+					<input data-cs-value="${label.value}" type="checkbox" id="${inputName}${label.value}" />
+				</label>`
+				);
+			}, "");
+
+			document.querySelector(`#${labelContainerId}`).innerHTML = "";
+			document
+				.querySelector(`#${labelContainerId}`)
+				.appendChild(htmlToElement(`<div> ${labelLines} </div>`));
+
 			const inputSearchElement = this;
 			const { width } = getComputedStyle(inputSearchElement);
 			const feedback = document.querySelector(`#${feedbackId}`);
