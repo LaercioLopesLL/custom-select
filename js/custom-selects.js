@@ -34,7 +34,6 @@ function customSelects(params) {
 		const hiddenInputId = inputName + "Input";
 		const searchInputId = inputName + "Search";
 		const feedbackId = inputName + "Feedback";
-		const labelContainerId = inputName + "LabelContainer";
 
 		const containerStringHtml = `
 			<div style="display: inline-block">
@@ -47,7 +46,7 @@ function customSelects(params) {
 							&#9745;
 						</button>
 					</div>
-					<div id="${labelContainerId}" class="label-container"></div>
+					<div class="label-container"></div>
 				</div>
 			</div>
 		`;
@@ -61,6 +60,11 @@ function customSelects(params) {
 
 		document.querySelector(`#${searchInputId}`).onclick = function (event) {
 			event.stopPropagation();
+
+			let selecteds = [];
+			if (hiddenInput.value) {
+				selecteds = JSON.parse(`[${hiddenInput.value}]`);
+			}
 
 			const options = Array.from(select.querySelectorAll("option")).map(
 				(option) => {
@@ -76,15 +80,13 @@ function customSelects(params) {
 					labels +
 					`<label for="${inputName}${label.value}">
 					${label.label}
-					<input data-cs-value="${label.value}" type="checkbox" id="${inputName}${label.value}" />
+					<input data-cs-value="${label.value}"
+						type="checkbox"
+						id="${inputName}${label.value}"
+					/>
 				</label>`
 				);
 			}, "");
-
-			document.querySelector(`#${labelContainerId}`).innerHTML = "";
-			document
-				.querySelector(`#${labelContainerId}`)
-				.appendChild(htmlToElement(`<div> ${labelLines} </div>`));
 
 			const inputSearchElement = this;
 			const { width } = getComputedStyle(inputSearchElement);
@@ -92,9 +94,22 @@ function customSelects(params) {
 			const labelContainer = document.querySelector(
 				`#${containerId} .label-container`
 			);
+
+			labelContainer.innerHTML = "";
+			labelContainer.appendChild(
+				htmlToElement(`<div> ${labelLines} </div>`)
+			);
+
+			labelContainer.querySelectorAll("input").forEach((input) => {
+				console.log(input, selecteds.includes(input.dataset.csValue));
+				if (selecteds.includes(parseInt(input.dataset.csValue))) {
+					input.checked = true;
+					input.parentElement.classList.add("cs-selected");
+				}
+			});
+
 			const container = document.querySelector(`#${containerId}`);
 			container.style.minWidth = width;
-			let selecteds = [];
 
 			container.querySelector(".cs-mark-all").onclick = function () {
 				selecteds = [];
@@ -123,10 +138,6 @@ function customSelects(params) {
 				hiddenInput.value = selecteds;
 				this.dataset.mark = !!this.dataset.mark ? "" : "1";
 			};
-
-			if (hiddenInput.value) {
-				selecteds = JSON.parse(`[${hiddenInput.value}]`);
-			}
 
 			inputSearchElement.onsearch = search;
 			inputSearchElement.onkeyup = search;
@@ -174,9 +185,8 @@ function customSelects(params) {
 			window.addEventListener("click", handleClickWindow);
 
 			function search() {
-				let input, filter, labels, txtValue;
-				input = inputSearchElement;
-				filter = input.value.toUpperCase();
+				let filter, labels, txtValue;
+				filter = inputSearchElement.value.toUpperCase();
 				labels = labelContainer.querySelectorAll("label");
 
 				Array.from(labels).map((label) => {
